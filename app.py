@@ -3,6 +3,8 @@
 # validate login credentials in database dump file
 
 # to connect to postgres database
+
+
 import psycopg2
 
 from waitress import serve
@@ -10,6 +12,8 @@ from waitress import serve
 from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
+
+
 
 @app.route("/validate", methods=["GET", "POST"]) 
 def validate(): #define function to validate password requirements
@@ -52,18 +56,12 @@ def validate(): #define function to validate password requirements
         # check for any flags 
         flagTotal = flag_len + flag_alpha + flag_num + flag_upper + flag_lower
 
-        print(flagTotal)
+        flagTotal.headers.add('Access-Control-Allow-Origin', '*')
 
         # return false if any flags present
         # true if passes validation
-        if flagTotal:
-            return {
-                'response' : 'False'
-            }
-        else:
-            return {
-                'response' : 'True'
-            }
+        return jsonify(flagTotal)
+    
     return render_template('index.html')
 
 @app.route("/login", methods=["GET", "POST"]) # login route checks login credentials
@@ -110,15 +108,12 @@ def login(): # define login function
         cur.close() 
         conn.close() 
 
+        login_exists.headers.add('Access-Control-Allow-Origin', '*')
+
         # return true if login credentials found
-        if login_exists:
-            return {
-                'response' : 'True'
-            }
-        else:
-            return {
-                'response' : 'False'
-            }
+        return {
+            'response' : login_exists
+        }
 
     return render_template('index.html')
 
