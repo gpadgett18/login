@@ -8,8 +8,9 @@ import psycopg2
 
 from waitress import serve
 
-from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
+
+from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
 
