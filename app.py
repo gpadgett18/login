@@ -14,7 +14,6 @@ from flask import Flask, request, jsonify, render_template
 app = Flask(__name__)
 
 
-
 @app.route("/validate", methods=["GET", "POST"]) 
 def validate(): #define function to validate password requirements
     
@@ -56,11 +55,14 @@ def validate(): #define function to validate password requirements
         # check for any flags 
         flagTotal = flag_len + flag_alpha + flag_num + flag_upper + flag_lower
 
-        flagTotal.headers.add('Access-Control-Allow-Origin', '*')
+        # create response object
+        response = jsonify(flagTotal)
 
-        # return false if any flags present
-        # true if passes validation
-        return jsonify(flagTotal)
+        # allows more permissions
+        response.headers.add('Access-Control-Allow-Origin', '*')
+
+        # return response object
+        return response
     
     return render_template('index.html')
 
@@ -108,12 +110,13 @@ def login(): # define login function
         cur.close() 
         conn.close() 
 
-        login_exists.headers.add('Access-Control-Allow-Origin', '*')
-
         # return true if login credentials found
-        return {
-            'response' : login_exists
-        }
+        response = jsonify(login_exists)
+
+        # allows more permissions
+        response.headers.add('Access-Control-Allow-Origin', '*')
+
+        return response
 
     return render_template('index.html')
 
